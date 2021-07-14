@@ -22,6 +22,7 @@ class ApiController extends Controller
         if($validator->fails()){
             $array['error'] = $validator->getMessageBag();
           //$array['error'] = $validator->messages();
+            return $array;
         }
 
         //fazendo inserção no banco
@@ -34,7 +35,13 @@ class ApiController extends Controller
 
     public function readAllTodos()
     {
+        $array = ['error' => ''];
 
+        $todos = Todo::all();
+
+        $array['list'] = $todos;
+
+        return $array;
     }
 
     public function readTodo()
