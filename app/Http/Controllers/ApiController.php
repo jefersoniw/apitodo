@@ -98,9 +98,13 @@ class ApiController extends Controller
         return $array;
     }
 
-    public function deleteTodo()
+    public function deleteTodo($id)
     {
+        $array = ['error' => ''];
 
+        Todo::find($id)->delete();
+
+        return $array;
     }
 
 }
