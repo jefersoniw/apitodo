@@ -44,9 +44,19 @@ class ApiController extends Controller
         return $array;
     }
 
-    public function readTodo()
+    public function readTodo($id)
     {
+        $array = ['error' => ''];
 
+        $todo = Todo::find($id);
+
+        if($todo){
+            $array['todo'] = $todo;
+        }else{
+            $array['error'] = 'A tarefa '.$id.' nao existe!!!';
+        }
+
+        return $array;
     }
 
     public function updateTodo()
