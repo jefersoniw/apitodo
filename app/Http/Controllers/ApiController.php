@@ -59,9 +59,43 @@ class ApiController extends Controller
         return $array;
     }
 
-    public function updateTodo()
+    public function updateTodo($id, Request $request)
     {
+        $array = ['error' => ''];
 
+        //fazendo validação
+        $rules = [
+            'tittle' => 'min:3',
+            'done' => 'boolean'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()){
+            $array['error'] = $validator->getMessageBag();
+
+            return $array;
+        }
+
+        $tittle = $request->input('tittle');
+        $done = $request->input('done');
+
+        //fazendo update no banco
+        $todo = Todo::find($id);
+        if($todo){
+
+            if($tittle){
+                $todo->tittle = $tittle;
+            }
+            if($done !== NULL){
+                $todo->done = $done;
+            }
+
+            $todo->save();
+        }else{
+            $array['error'] = 'A tarefa '.$id.' não existe';
+        }
+
+        return $array;
     }
 
     public function deleteTodo()
