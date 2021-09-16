@@ -41,6 +41,9 @@ class ApiController extends Controller
 
         $array['list'] = $todos->items();
         $array['paginas'] = $todos->currentPage();
+        $array['total'] = $todos->count();
+        $array['proximo'] = $todos->nextPageUrl();
+        $array['anterior'] = $todos->previousPageUrl();
 
         return $array;
     }

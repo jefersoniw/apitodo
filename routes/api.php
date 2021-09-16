@@ -26,10 +26,20 @@ Route::get('/ping', function () {
     ];
 });
 
-Route::post('/todo', [ApiController::class, 'createTodo']);
+Route::post('/todo', [ApiController::class, 'createTodo'])->middleware('auth:api');
 Route::get('/todos', [ApiController::class, 'readAllTodos']);
 Route::get('/todo/{id}', [ApiController::class, 'readTodo']);
-Route::put('/todo/{id}', [ApiController::class, 'updateTodo']);
-Route::delete('/todo/{id}', [ApiController::class, 'deleteTodo']);
+Route::put('/todo/{id}', [ApiController::class, 'updateTodo'])->middleware('auth:api');
+Route::delete('/todo/{id}', [ApiController::class, 'deleteTodo'])->middleware('auth:api');
 
 Route::post('/user', [AuthController::class, 'create']);
+
+
+//jwt
+Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:api');
+Route::get('/auth/me', [AuthController::class, 'me'])->middleware('auth:api');
+
+Route::get('/unauthenticated', function () {
+    return ['error' => 'O usuário não está logado'];
+})->name('login');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -39,6 +40,44 @@ class AuthController extends Controller
         $user->password = Hash::make($password);
         $user->token = '';
         $user->save();
+
+        return $array;
+    }
+
+
+    public function login(Request $request){
+        $array = ['error' => ''];
+
+        $creds = $request->only('email', 'password');
+
+        $token = Auth::attempt($creds);
+
+        if($token){
+
+            $array['token'] = $token;
+        } else {
+
+            $array['error'] = 'Email e/ou Senha inválidos';
+        }
+
+        return $array;
+    }
+
+
+    public function logout(){
+        $array = ['error' => ''];
+
+        Auth::logout();
+
+        return $array;
+    }
+
+    public function me(){
+        $array = ['error' => ''];
+
+        $me = Auth::user();
+
+        $array['me'] = $me->email;
 
         return $array;
     }
